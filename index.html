@@ -1,0 +1,474 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title> Complete user registration system using PHP and MySQL database</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" />
+    <link href="https://fonts.googleapis.com/css?family=Miriam+Libre|Nunito" rel="stylesheet">
+    <link rel="stylesheet" href="https://codewithawa.com/frontend/css/style.css">
+    <link rel="stylesheet" href="https://codewithawa.com/assets/plugins/ckeditor/plugins/codesnippet/lib/highlight/styles/prism.css">
+    <link rel="stylesheet" href="https://codewithawa.com/assets/plugins/font-awesome/css/font-awesome.min.css">
+    <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+    <link rel="stylesheet" href="https://codewithawa.com/frontend/css/footer/demo.css">
+    <link rel="stylesheet" href="https://codewithawa.com/frontend/css/footer/footer-distributed-with-contact-form.css">
+</head>
+<body>
+    <div class="container-fluid" style="padding: 0px;">
+
+        <div class="container">
+            <div class="row">
+
+                <div class="col-md-8 posts-wrapper details-page">
+
+                    <h1 class="text-center">Complete user registration system using PHP and MySQL database</h1>
+                    <br>
+
+                    <div class="post-body">
+                        <p>In this tutorial, I walk you through the complete process of creating a user registration system where users can create an account by providing username, email and password, login and logout using PHP and MySQL. I will also show you how you can make some pages accessible only to logged in users. Any other user not logged in will not be able to access the page.</p>
+
+                        <p>The first thing we&#39;ll need to do is set up our database.&nbsp;</p>
+
+                        <p>Create a database called&nbsp;<strong>registration</strong>. In the <strong>registration</strong> database, add a table called&nbsp;<strong>users</strong>. The users table will take the following four fields.</p>
+
+                        <ul>
+                            <li>id</li>
+                            <li>username &nbsp;- &nbsp;varchar(100)</li>
+                            <li>email &nbsp;- &nbsp;varchar(100)</li>
+                            <li>password &nbsp;- &nbsp;varchar(100)</li>
+                        </ul>
+
+                        <p>You can create this using a MySQL client&nbsp;like PHPMyAdmin.</p>
+
+                        <p><img alt="" src="https://codewithawa.com/assets/post_images/Screenshot from 2017-07-09 16-32-51.png.2017-07-09.1499614401.png" style="height:135px; width:100%" /></p>
+
+                        <p>Or you can create it on the MySQL prompt using the following SQL script:</p>
+
+                        <pre>
+<code class="language-php">CREATE TABLE `users` (
+  `id` int(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
+  `username` varchar(100) NOT NULL,
+  `email` varchar(100) NOT NULL,
+  `password` varchar(100) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;</code></pre>
+
+                        <p>And that&#39;s it with the database.&nbsp;</p>
+
+                        <p>Now create a folder called&nbsp;<strong>registration</strong>&nbsp;in a directory&nbsp;accessible to our server. i.e create the folder inside htdocs (if you are using XAMPP server) or inside&nbsp;<strong>www&nbsp;</strong>(if you are using wampp server).</p>
+
+                        <p>Inside the folder <strong>registration,&nbsp;</strong>create the following files:&nbsp;</p>
+
+                        <p><img alt="" src="https://codewithawa.com/assets/post_images/Screenshot from 2017-07-09 16-44-54.png.2017-07-09.1499615116.png" style="height:160px; width:495px" />&nbsp;</p>
+
+                        <p>Open these files up in a text editor of your choice. Mine is Sublime Text 3.</p>
+
+                        <h3>Registering a user</h3>
+
+                        <p>Open the register.php file and paste the following code in it:</p>
+
+                        <p><strong>regiser.php:</strong></p>
+
+                        <pre>
+<code class="language-php">&lt;?php include('server.php') ?&gt;
+&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+&lt;head&gt;
+  &lt;title&gt;Registration system PHP and MySQL&lt;/title&gt;
+  &lt;link rel="stylesheet" type="text/css" href="style.css"&gt;
+&lt;/head&gt;
+&lt;body&gt;
+  &lt;div class="header"&gt;
+  	&lt;h2&gt;Register&lt;/h2&gt;
+  &lt;/div&gt;
+	
+  &lt;form method="post" action="register.php"&gt;
+  	&lt;?php include('errors.php'); ?&gt;
+  	&lt;div class="input-group"&gt;
+  	  &lt;label&gt;Username&lt;/label&gt;
+  	  &lt;input type="text" name="username" value="&lt;?php echo $username; ?&gt;"&gt;
+  	&lt;/div&gt;
+  	&lt;div class="input-group"&gt;
+  	  &lt;label&gt;Email&lt;/label&gt;
+  	  &lt;input type="email" name="email" value="&lt;?php echo $email; ?&gt;"&gt;
+  	&lt;/div&gt;
+  	&lt;div class="input-group"&gt;
+  	  &lt;label&gt;Password&lt;/label&gt;
+  	  &lt;input type="password" name="password_1"&gt;
+  	&lt;/div&gt;
+  	&lt;div class="input-group"&gt;
+  	  &lt;label&gt;Confirm password&lt;/label&gt;
+  	  &lt;input type="password" name="password_2"&gt;
+  	&lt;/div&gt;
+  	&lt;div class="input-group"&gt;
+  	  &lt;button type="submit" class="btn" name="reg_user"&gt;Register&lt;/button&gt;
+  	&lt;/div&gt;
+  	&lt;p&gt;
+  		Already a member? &lt;a href="login.php"&gt;Sign in&lt;/a&gt;
+  	&lt;/p&gt;
+  &lt;/form&gt;
+&lt;/body&gt;
+&lt;/html&gt;</code></pre>
+
+                        <p>&nbsp;</p>
+
+                        <p>Nothing complicated so far right?</p>
+
+                        <div class="square-ad">
+                            <script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+                            <!-- CWA - In-post Square Ad -->
+                            <ins class="adsbygoogle" style="display:inline-block;width:336px;height:280px" data-ad-client="ca-pub-9329244789410485" data-ad-slot="3605286872"></ins>
+                            <script>
+                                (adsbygoogle = window.adsbygoogle || []).push({});
+                            </script>
+                        </div>
+
+
+                        <p>A few things to note here:</p>
+
+                        <p>First is that our form&#39;s&nbsp;<strong>action</strong>&nbsp;attribute is set to register.php. This means that when the form submit button is clicked, all the data&nbsp;in the form will be submitted to the same page (register.php). The part of the code that receives this form data is written in the server.php file and that&#39;s why we are including it at the very top of the register.php file.</p>
+
+                        <p>Notice also that we are including the errors.php file to display form errors. We will come to that soon.</p>
+
+                        <p>As you can see&nbsp;in the head section, we are linking to a style.css file. Open up the style.css file and paste&nbsp;the following CSS in it:</p>
+
+                        <pre>
+<code class="language-css">* {
+  margin: 0px;
+  padding: 0px;
+}
+body {
+  font-size: 120%;
+  background: #F8F8FF;
+}
+
+.header {
+  width: 30%;
+  margin: 50px auto 0px;
+  color: white;
+  background: #5F9EA0;
+  text-align: center;
+  border: 1px solid #B0C4DE;
+  border-bottom: none;
+  border-radius: 10px 10px 0px 0px;
+  padding: 20px;
+}
+form, .content {
+  width: 30%;
+  margin: 0px auto;
+  padding: 20px;
+  border: 1px solid #B0C4DE;
+  background: white;
+  border-radius: 0px 0px 10px 10px;
+}
+.input-group {
+  margin: 10px 0px 10px 0px;
+}
+.input-group label {
+  display: block;
+  text-align: left;
+  margin: 3px;
+}
+.input-group input {
+  height: 30px;
+  width: 93%;
+  padding: 5px 10px;
+  font-size: 16px;
+  border-radius: 5px;
+  border: 1px solid gray;
+}
+.btn {
+  padding: 10px;
+  font-size: 15px;
+  color: white;
+  background: #5F9EA0;
+  border: none;
+  border-radius: 5px;
+}
+.error {
+  width: 92%; 
+  margin: 0px auto; 
+  padding: 10px; 
+  border: 1px solid #a94442; 
+  color: #a94442; 
+  background: #f2dede; 
+  border-radius: 5px; 
+  text-align: left;
+}
+.success {
+  color: #3c763d; 
+  background: #dff0d8; 
+  border: 1px solid #3c763d;
+  margin-bottom: 20px;
+}
+</code></pre>
+
+                        <p>Now the form looks beautiful.</p>
+
+                        <div class="ad">
+                            <script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+                            <!-- CWA - Flat inside post ad -->
+                            <ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-9329244789410485" data-ad-slot="4651254163" data-ad-format="auto"></ins>
+                            <script>
+                                (adsbygoogle = window.adsbygoogle || []).push({});
+                            </script>
+                        </div>
+
+
+                        <p>Let&#39;s now write the code that will receive information submitted from the form and store (register) the information in the database. As promised earlier, we do this in the server.php file.</p>
+
+                        <p>Open server.php and paste this code in it:</p>
+
+                        <p><strong>server.php</strong></p>
+
+                        <pre>
+<code class="language-php">&lt;?php
+session_start();
+
+// initializing variables
+$username = "";
+$email    = "";
+$errors = array(); 
+
+// connect to the database
+$db = mysqli_connect('localhost', 'root', '', 'registration');
+
+// REGISTER USER
+if (isset($_POST['reg_user'])) {
+  // receive all input values from the form
+  $username = mysqli_real_escape_string($db, $_POST['username']);
+  $email = mysqli_real_escape_string($db, $_POST['email']);
+  $password_1 = mysqli_real_escape_string($db, $_POST['password_1']);
+  $password_2 = mysqli_real_escape_string($db, $_POST['password_2']);
+
+  // form validation: ensure that the form is correctly filled ...
+  // by adding (array_push()) corresponding error unto $errors array
+  if (empty($username)) { array_push($errors, "Username is required"); }
+  if (empty($email)) { array_push($errors, "Email is required"); }
+  if (empty($password_1)) { array_push($errors, "Password is required"); }
+  if ($password_1 != $password_2) {
+	array_push($errors, "The two passwords do not match");
+  }
+
+  // first check the database to make sure 
+  // a user does not already exist with the same username and/or email
+  $user_check_query = "SELECT * FROM users WHERE username='$username' OR email='$email' LIMIT 1";
+  $result = mysqli_query($db, $user_check_query);
+  $user = mysqli_fetch_assoc($result);
+  
+  if ($user) { // if user exists
+    if ($user['username'] === $username) {
+      array_push($errors, "Username already exists");
+    }
+
+    if ($user['email'] === $email) {
+      array_push($errors, "email already exists");
+    }
+  }
+
+  // Finally, register user if there are no errors in the form
+  if (count($errors) == 0) {
+  	$password = md5($password_1);//encrypt the password before saving in the database
+
+  	$query = "INSERT INTO users (username, email, password) 
+  			  VALUES('$username', '$email', '$password')";
+  	mysqli_query($db, $query);
+  	$_SESSION['username'] = $username;
+  	$_SESSION['success'] = "You are now logged in";
+  	header('location: index.php');
+  }
+}
+
+// ... 
+</code></pre>
+
+                        <p>Sessions are used to track logged in users and so we include a session_start() at the top of the file.</p>
+
+                        <p>The comments in the code pretty much explain everything, but I&#39;ll highlight a few things here.</p>
+
+                        <p>The if statement determines if the reg_user button on the registration form is clicked. Remember, in our form, the submit button has a name attribute set to reg_user and that is what we are referencing in the if statement.</p>
+
+                        <p>All the data is received from the form and checked to make sure that the user correctly filled the form. Passwords are also compared to make sure they match.</p>
+
+                        <p>If no errors were encountered, the user is registered in the&nbsp;<strong>users</strong>&nbsp;table in the database with a hashed password. The hashed password is for security reasons. It ensures that even if a hacker manages to gain access to your database, they would not be able to read your password.</p>
+
+                        <p>But error messages are not displaying&nbsp;now because our errors.php file is still empty. To display the errors, paste this code in the errors.php file.</p>
+
+                        <pre>
+<code class="language-php">&lt;?php  if (count($errors) &gt; 0) : ?&gt;
+  &lt;div class="error"&gt;
+  	&lt;?php foreach ($errors as $error) : ?&gt;
+  	  &lt;p&gt;&lt;?php echo $error ?&gt;&lt;/p&gt;
+  	&lt;?php endforeach ?&gt;
+  &lt;/div&gt;
+&lt;?php  endif ?&gt;
+</code></pre>
+
+                        <p>When a user is registered in the database, they are immediately logged in and redirected to the index.php page.</p>
+
+                        <p>And that&#39;s it for registration. Let&#39;s look at user login.</p>
+
+                        <div class="ad">
+                            <script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+                            <!-- CWA - Flat inside post ad -->
+                            <ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-9329244789410485" data-ad-slot="4651254163" data-ad-format="auto"></ins>
+                            <script>
+                                (adsbygoogle = window.adsbygoogle || []).push({});
+                            </script>
+                        </div>
+
+
+                        <h3>Login user</h3>
+
+                        <p>Logging a user in is an even easier thing to do. Just open the login page and put this code inside it:</p>
+
+                        <pre>
+<code class="language-php">&lt;?php include('server.php') ?&gt;
+&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+&lt;head&gt;
+  &lt;title&gt;Registration system PHP and MySQL&lt;/title&gt;
+  &lt;link rel="stylesheet" type="text/css" href="style.css"&gt;
+&lt;/head&gt;
+&lt;body&gt;
+  &lt;div class="header"&gt;
+  	&lt;h2&gt;Login&lt;/h2&gt;
+  &lt;/div&gt;
+	 
+  &lt;form method="post" action="login.php"&gt;
+  	&lt;?php include('errors.php'); ?&gt;
+  	&lt;div class="input-group"&gt;
+  		&lt;label&gt;Username&lt;/label&gt;
+  		&lt;input type="text" name="username" &gt;
+  	&lt;/div&gt;
+  	&lt;div class="input-group"&gt;
+  		&lt;label&gt;Password&lt;/label&gt;
+  		&lt;input type="password" name="password"&gt;
+  	&lt;/div&gt;
+  	&lt;div class="input-group"&gt;
+  		&lt;button type="submit" class="btn" name="login_user"&gt;Login&lt;/button&gt;
+  	&lt;/div&gt;
+  	&lt;p&gt;
+  		Not yet a member? &lt;a href="register.php"&gt;Sign up&lt;/a&gt;
+  	&lt;/p&gt;
+  &lt;/form&gt;
+&lt;/body&gt;
+&lt;/html&gt;</code></pre>
+
+                        <p>Everything on this page is quite similar to the register.php page.</p>
+
+                        <p>Now the code that logs the user in is to be written in the same server.php file. So open the server.php file and add this code at the end of the file:</p>
+
+                        <pre>
+<code class="language-php">
+// ... 
+
+// LOGIN USER
+if (isset($_POST['login_user'])) {
+  $username = mysqli_real_escape_string($db, $_POST['username']);
+  $password = mysqli_real_escape_string($db, $_POST['password']);
+
+  if (empty($username)) {
+  	array_push($errors, "Username is required");
+  }
+  if (empty($password)) {
+  	array_push($errors, "Password is required");
+  }
+
+  if (count($errors) == 0) {
+  	$password = md5($password);
+  	$query = "SELECT * FROM users WHERE username='$username' AND password='$password'";
+  	$results = mysqli_query($db, $query);
+  	if (mysqli_num_rows($results) == 1) {
+  	  $_SESSION['username'] = $username;
+  	  $_SESSION['success'] = "You are now logged in";
+  	  header('location: index.php');
+  	}else {
+  		array_push($errors, "Wrong username/password combination");
+  	}
+  }
+}
+
+?&gt;</code></pre>
+
+                        <p>Again all this does is check if the user has filled the form correctly, verifies that their credentials match a record from the database and logs them in if it does. After logging in, the user is redirected them to the index.php file with a success message.</p>
+
+                        <div class="ad">
+                            <script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+                            <!-- CWA - Flat inside post ad -->
+                            <ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-9329244789410485" data-ad-slot="4651254163" data-ad-format="auto"></ins>
+                            <script>
+                                (adsbygoogle = window.adsbygoogle || []).push({});
+                            </script>
+                        </div>
+
+
+                        <p>Now let&#39;s see what happens in the index.php file. Open it up and paste the following code in it:</p>
+
+                        <pre>
+<code class="language-php">&lt;?php 
+  session_start(); 
+
+  if (!isset($_SESSION['username'])) {
+  	$_SESSION['msg'] = "You must log in first";
+  	header('location: login.php');
+  }
+  if (isset($_GET['logout'])) {
+  	session_destroy();
+  	unset($_SESSION['username']);
+  	header("location: login.php");
+  }
+?&gt;
+&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+&lt;head&gt;
+	&lt;title&gt;Home&lt;/title&gt;
+	&lt;link rel="stylesheet" type="text/css" href="style.css"&gt;
+&lt;/head&gt;
+&lt;body&gt;
+
+&lt;div class="header"&gt;
+	&lt;h2&gt;Home Page&lt;/h2&gt;
+&lt;/div&gt;
+&lt;div class="content"&gt;
+  	&lt;!-- notification message --&gt;
+  	&lt;?php if (isset($_SESSION['success'])) : ?&gt;
+      &lt;div class="error success" &gt;
+      	&lt;h3&gt;
+          &lt;?php 
+          	echo $_SESSION['success']; 
+          	unset($_SESSION['success']);
+          ?&gt;
+      	&lt;/h3&gt;
+      &lt;/div&gt;
+  	&lt;?php endif ?&gt;
+
+    &lt;!-- logged in user information --&gt;
+    &lt;?php  if (isset($_SESSION['username'])) : ?&gt;
+    	&lt;p&gt;Welcome &lt;strong&gt;&lt;?php echo $_SESSION['username']; ?&gt;&lt;/strong&gt;&lt;/p&gt;
+    	&lt;p&gt; &lt;a href="index.php?logout='1'" style="color: red;"&gt;logout&lt;/a&gt; &lt;/p&gt;
+    &lt;?php endif ?&gt;
+&lt;/div&gt;
+		
+&lt;/body&gt;
+&lt;/html&gt;</code></pre>
+
+                        <p>The first if statement checks if the user is already logged in. If they are not logged in, they will be redirected to the login page. Hence this page is accessible to only logged in users. If you&#39;d like to make any page accessible only to logged in users, all you have to do is place this if statement at the top of the file.</p>
+
+                        <p>The second if statement checks if the user has clicked the logout button. If yes, the system logs them out and redirects them back to the login page.</p>
+
+                        <p>And that&#39;s it!</p>
+                        <p>Regards,<br> Aravindh.S
+                        </p>
+                        <hr />
+                        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+                        <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
+                        <script src="https://codewithawa.com/frontend/js/scripts.js"></script>
+                        <script src="https://codewithawa.com/assets/plugins/ckeditor/plugins/codesnippet/lib/highlight/prism.js"></script>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
